@@ -652,6 +652,10 @@ def get_refresh_token_model():
     return apps.get_model(oauth2_settings.REFRESH_TOKEN_MODEL)
 
 
+def get_user_model():
+    return apps.get_model(oauth2_settings.USER_MODEL)
+
+
 def get_application_admin_class():
     """Return the Application admin class that is active in this project."""
     application_admin_class = oauth2_settings.APPLICATION_ADMIN_CLASS

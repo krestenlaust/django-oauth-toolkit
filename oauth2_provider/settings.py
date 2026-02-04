@@ -23,6 +23,7 @@ from django.http import HttpRequest
 from django.urls import reverse
 from django.utils.module_loading import import_string
 from oauthlib.common import Request
+from django.contrib.auth import authenticate, get_user_model
 
 
 USER_SETTINGS = getattr(settings, "OAUTH2_PROVIDER", None)
@@ -32,6 +33,7 @@ ACCESS_TOKEN_MODEL = getattr(settings, "OAUTH2_PROVIDER_ACCESS_TOKEN_MODEL", "oa
 ID_TOKEN_MODEL = getattr(settings, "OAUTH2_PROVIDER_ID_TOKEN_MODEL", "oauth2_provider.IDToken")
 GRANT_MODEL = getattr(settings, "OAUTH2_PROVIDER_GRANT_MODEL", "oauth2_provider.Grant")
 REFRESH_TOKEN_MODEL = getattr(settings, "OAUTH2_PROVIDER_REFRESH_TOKEN_MODEL", "oauth2_provider.RefreshToken")
+USER_MODEL = getattr(settings, "OAUTH2_PROVIDER_USER_MODEL", get_user_model())
 
 DEFAULTS = {
     "CLIENT_ID_GENERATOR_CLASS": "oauth2_provider.generators.ClientIdGenerator",

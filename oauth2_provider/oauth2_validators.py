@@ -11,7 +11,7 @@ from urllib.parse import unquote_plus
 
 import requests
 from django.conf import settings
-from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth import authenticate
 from django.contrib.auth.hashers import check_password, identify_hasher
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
@@ -35,6 +35,7 @@ from .models import (
     get_grant_model,
     get_id_token_model,
     get_refresh_token_model,
+    get_user_model,
 )
 from .scopes import get_scopes_backend
 from .settings import oauth2_settings

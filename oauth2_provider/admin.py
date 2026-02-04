@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.contrib.auth import get_user_model
 
 from oauth2_provider.models import (
     get_access_token_admin_class,
@@ -12,6 +11,7 @@ from oauth2_provider.models import (
     get_id_token_model,
     get_refresh_token_admin_class,
     get_refresh_token_model,
+    get_user_model,
 )
 
 

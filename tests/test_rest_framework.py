@@ -2,7 +2,6 @@ from datetime import timedelta
 
 import pytest
 from django.conf.urls import include
-from django.contrib.auth import get_user_model
 from django.core.exceptions import ImproperlyConfigured
 from django.http import HttpResponse
 from django.test import TestCase
@@ -22,7 +21,7 @@ from oauth2_provider.contrib.rest_framework import (
     TokenHasScope,
     TokenMatchesOASRequirements,
 )
-from oauth2_provider.models import get_access_token_model, get_application_model
+from oauth2_provider.models import get_access_token_model, get_application_model, get_user_model
 
 from . import presets
 
