@@ -24,7 +24,7 @@ from django.urls import reverse
 from django.utils.module_loading import import_string
 from oauthlib.common import Request
 from django.contrib.auth import authenticate, get_user_model
-
+from .utils import model_to_string
 
 USER_SETTINGS = getattr(settings, "OAUTH2_PROVIDER", None)
 
@@ -33,7 +33,7 @@ ACCESS_TOKEN_MODEL = getattr(settings, "OAUTH2_PROVIDER_ACCESS_TOKEN_MODEL", "oa
 ID_TOKEN_MODEL = getattr(settings, "OAUTH2_PROVIDER_ID_TOKEN_MODEL", "oauth2_provider.IDToken")
 GRANT_MODEL = getattr(settings, "OAUTH2_PROVIDER_GRANT_MODEL", "oauth2_provider.Grant")
 REFRESH_TOKEN_MODEL = getattr(settings, "OAUTH2_PROVIDER_REFRESH_TOKEN_MODEL", "oauth2_provider.RefreshToken")
-USER_MODEL = getattr(settings, "OAUTH2_PROVIDER_USER_MODEL", get_user_model())
+USER_MODEL = getattr(settings, "OAUTH2_PROVIDER_USER_MODEL", model_to_string(get_user_model()))
 
 DEFAULTS = {
     "CLIENT_ID_GENERATOR_CLASS": "oauth2_provider.generators.ClientIdGenerator",
@@ -63,6 +63,7 @@ DEFAULTS = {
     "ID_TOKEN_MODEL": ID_TOKEN_MODEL,
     "GRANT_MODEL": GRANT_MODEL,
     "REFRESH_TOKEN_MODEL": REFRESH_TOKEN_MODEL,
+    "USER_MODEL": USER_MODEL,
     "APPLICATION_ADMIN_CLASS": "oauth2_provider.admin.ApplicationAdmin",
     "ACCESS_TOKEN_ADMIN_CLASS": "oauth2_provider.admin.AccessTokenAdmin",
     "GRANT_ADMIN_CLASS": "oauth2_provider.admin.GrantAdmin",
