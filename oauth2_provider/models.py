@@ -6,6 +6,7 @@ from urllib.parse import parse_qsl, urlparse
 
 from django.apps import apps
 from django.conf import settings
+from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.hashers import identify_hasher, make_password
 from django.core.exceptions import ImproperlyConfigured
 from django.db import models, transaction
@@ -529,6 +530,34 @@ class AbstractRefreshToken(models.Model):
 class RefreshToken(AbstractRefreshToken):
     class Meta(AbstractRefreshToken.Meta):
         swappable = "OAUTH2_PROVIDER_REFRESH_TOKEN_MODEL"
+
+
+class AbstractCustomUser(AbstractBaseUser):
+    first_name = models.CharField(_("first name"), max_length=150, blank=True)
+    last_name = models.CharField(_("last name"), max_length=150, blank=True)
+    email = models.EmailField(_("email address"), blank=True)
+    is_active = models.BooleanField(
+        _("active"),
+        default=True,
+        help_text=_(
+            "Designates whether this user should be treated as active. "
+            "Unselect this instead of deleting accounts."
+        ),
+    )
+    date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
+
+    EMAIL_FIELD = "email"
+    USERNAME_FIELD = "username"
+
+    id = models.BigAutoField(primary_key=True)
+
+    class Meta:
+        abstract = True
+
+
+class CustomUser(AbstractCustomUser):
+    class Meta(AbstractCustomUser.Meta):
+        swappable = "OAUTH2_PROVIDER_USER_MODEL"
 
 
 class AbstractIDToken(models.Model):
