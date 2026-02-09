@@ -11,6 +11,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import FormView, View
+from django.conf import settings
 
 from ..exceptions import OAuthToolkitError
 from ..forms import AllowForm
@@ -35,6 +36,21 @@ class BaseAuthorizationView(LoginRequiredMixin, OAuthLibMixin, View):
     * Implicit grant
 
     """
+
+    login_url = None
+
+    def get_login_url(self):
+        """
+        Override to use custom login URL instead of Django admin.
+        """
+
+        login_url = self.login_url or oauth2_settings.LOGIN_URL
+        if not login_url:
+            login_url = settings.LOGIN_URL
+
+            if not login_url:
+                return super().get_login_url()
+        return str(login_url)
 
     def dispatch(self, request, *args, **kwargs):
         self.oauth2_data = {}
