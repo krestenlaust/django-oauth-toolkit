@@ -1,7 +1,6 @@
 from datetime import timedelta
 
 import pytest
-from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import check_password
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.test import TestCase
@@ -15,6 +14,7 @@ from oauth2_provider.models import (
     get_grant_model,
     get_id_token_model,
     get_refresh_token_model,
+    get_user_model,
 )
 
 from . import presets

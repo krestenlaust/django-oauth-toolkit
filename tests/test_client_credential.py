@@ -2,14 +2,13 @@ import json
 from unittest.mock import patch
 
 import pytest
-from django.contrib.auth import get_user_model
 from django.core.exceptions import SuspiciousOperation
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
 from django.views.generic import View
 from oauthlib.oauth2 import BackendApplicationServer
 
-from oauth2_provider.models import get_access_token_model, get_application_model
+from oauth2_provider.models import get_access_token_model, get_application_model, get_user_model
 from oauth2_provider.oauth2_backends import OAuthLibCore
 from oauth2_provider.oauth2_validators import OAuth2Validator
 from oauth2_provider.views import ProtectedResourceView

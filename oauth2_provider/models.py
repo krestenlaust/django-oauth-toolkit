@@ -6,6 +6,7 @@ from urllib.parse import parse_qsl, urlparse
 
 from django.apps import apps
 from django.conf import settings
+from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.hashers import identify_hasher, make_password
 from django.core.exceptions import ImproperlyConfigured
 from django.db import models, transaction
@@ -100,7 +101,7 @@ class AbstractApplication(models.Model):
     id = models.BigAutoField(primary_key=True)
     client_id = models.CharField(max_length=100, unique=True, default=generate_client_id, db_index=True)
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        oauth2_settings.USER_MODEL,
         related_name="%(app_label)s_%(class)s",
         null=True,
         blank=True,
@@ -305,7 +306,7 @@ class AbstractGrant(models.Model):
 
     id = models.BigAutoField(primary_key=True)
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="%(app_label)s_%(class)s"
+        oauth2_settings.USER_MODEL, on_delete=models.CASCADE, related_name="%(app_label)s_%(class)s"
     )
     code = models.CharField(max_length=255, unique=True)  # code comes from oauthlib
     application = models.ForeignKey(oauth2_settings.APPLICATION_MODEL, on_delete=models.CASCADE)
@@ -365,7 +366,7 @@ class AbstractAccessToken(models.Model):
 
     id = models.BigAutoField(primary_key=True)
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        oauth2_settings.USER_MODEL,
         on_delete=models.CASCADE,
         blank=True,
         null=True,
@@ -479,7 +480,7 @@ class AbstractRefreshToken(models.Model):
 
     id = models.BigAutoField(primary_key=True)
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="%(app_label)s_%(class)s"
+        oauth2_settings.USER_MODEL, on_delete=models.CASCADE, related_name="%(app_label)s_%(class)s"
     )
     token = models.CharField(max_length=255)
     application = models.ForeignKey(oauth2_settings.APPLICATION_MODEL, on_delete=models.CASCADE)
@@ -531,6 +532,34 @@ class RefreshToken(AbstractRefreshToken):
         swappable = "OAUTH2_PROVIDER_REFRESH_TOKEN_MODEL"
 
 
+class AbstractCustomUser(AbstractBaseUser):
+    first_name = models.CharField(_("first name"), max_length=150, blank=True)
+    last_name = models.CharField(_("last name"), max_length=150, blank=True)
+    email = models.EmailField(_("email address"), blank=True)
+    is_active = models.BooleanField(
+        _("active"),
+        default=True,
+        help_text=_(
+            "Designates whether this user should be treated as active. "
+            "Unselect this instead of deleting accounts."
+        ),
+    )
+    date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
+
+    EMAIL_FIELD = "email"
+    USERNAME_FIELD = "username"
+
+    id = models.BigAutoField(primary_key=True)
+
+    class Meta:
+        abstract = True
+
+
+class CustomUser(AbstractCustomUser):
+    class Meta(AbstractCustomUser.Meta):
+        swappable = "OAUTH2_PROVIDER_USER_MODEL"
+
+
 class AbstractIDToken(models.Model):
     """
     An IDToken instance represents the actual token to
@@ -549,7 +578,7 @@ class AbstractIDToken(models.Model):
 
     id = models.BigAutoField(primary_key=True)
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        oauth2_settings.USER_MODEL,
         on_delete=models.CASCADE,
         blank=True,
         null=True,
@@ -650,6 +679,10 @@ def get_id_token_model():
 def get_refresh_token_model():
     """Return the RefreshToken model that is active in this project."""
     return apps.get_model(oauth2_settings.REFRESH_TOKEN_MODEL)
+
+
+def get_user_model():
+    return apps.get_model(oauth2_settings.USER_MODEL)
 
 
 def get_application_admin_class():

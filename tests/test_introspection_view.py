@@ -2,12 +2,11 @@ import calendar
 import datetime
 
 import pytest
-from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 
-from oauth2_provider.models import get_access_token_model, get_application_model
+from oauth2_provider.models import get_access_token_model, get_application_model, get_user_model
 
 from . import presets
 from .utils import get_basic_auth_header

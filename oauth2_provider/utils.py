@@ -32,3 +32,7 @@ def get_timezone(time_zone):
 
             return pytz.timezone(time_zone)
         return zoneinfo.ZoneInfo(time_zone)
+
+
+def model_to_string(model_cls):
+    return f"{model_cls._meta.app_label}.{model_cls.__name__}"

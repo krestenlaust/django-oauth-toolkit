@@ -4,7 +4,6 @@ import json
 from urllib.parse import parse_qs, urlencode, urlparse
 
 import pytest
-from django.contrib.auth import get_user_model
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
 from django.utils import timezone
@@ -16,6 +15,7 @@ from oauth2_provider.models import (
     get_application_model,
     get_grant_model,
     get_refresh_token_model,
+    get_user_model,
 )
 from oauth2_provider.oauth2_validators import OAuth2Validator
 from oauth2_provider.views import ProtectedResourceView, ScopedProtectedResourceView

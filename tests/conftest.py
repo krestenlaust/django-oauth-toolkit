@@ -5,12 +5,11 @@ from urllib.parse import parse_qs, urlparse
 
 import pytest
 from django.conf import settings as test_settings
-from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.utils import dateformat, timezone
 from jwcrypto import jwk, jwt
 
-from oauth2_provider.models import get_application_model, get_id_token_model
+from oauth2_provider.models import get_application_model, get_id_token_model, get_user_model
 from oauth2_provider.settings import oauth2_settings as _oauth2_settings
 
 from . import presets
